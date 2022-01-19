@@ -21,9 +21,8 @@ public class GenerateEnemies : MonoBehaviour
     {
         SpawnEnemy();
     }
-
-
-    //Εαν ο παίκτης βρίσκεται μέσα στο δάσος των ορκ και δεν υπάρχει ήδη εχθρός, γίνεται spawn.
+    
+    //If the player is inside the Grove of Orcs and there is not an enemy already, spawn one
     void SpawnEnemy()
     {
         if (transform.position.x < -145 && transform.position.z >= 121 && GameObject.FindGameObjectsWithTag("Enemy").Length == 0)
@@ -51,6 +50,5 @@ public class GenerateEnemies : MonoBehaviour
             enemyHasSpawned = true;
         }
     }
-
-
+    
 }

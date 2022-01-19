@@ -30,6 +30,10 @@ public class NPC : MonoBehaviour
 
     void Update()
     {
+        /* In order to control the NPCs' actions for the different parts in our story, we are using a value called "phase".
+         * Each time the story progresses (for example after a dialogue has been triggered or a quest has been completed)
+         * the "phase" value increases. The NPCs' script and some other actions are depended on this value.
+         */
         if (Input.GetKeyDown(KeyCode.E))
         {
             pressedE = true;
@@ -38,7 +42,7 @@ public class NPC : MonoBehaviour
                 this.gameObject.GetComponent<NPC>().enabled = true;
                 dialogueSystem.Names = name;
 
-                //Έλεγχος αν κάποιο quest έχει ολοκληρωθεί.
+                //Check if a quest has been completed
 
                 //Bob's Quest
                 if (playerInfo.GetLevel() >= 5 && playerInfo.GetPhase() == 12 && name.Equals("Bob"))
@@ -58,10 +62,7 @@ public class NPC : MonoBehaviour
                     playerInfo.NextPhase();
                 }
 
-
-
-
-                //Ανάλογα με το phase του παιχνιδιού, φέρνει τον αντίστοιχο πίνακα με τις προτάσεις.
+                //Depending on the current story phase, fetch the dialogue script
                 switch (playerInfo.GetPhase())
                 {
                     case 0: dialogueSystem.dialogueLines = sentences; break;

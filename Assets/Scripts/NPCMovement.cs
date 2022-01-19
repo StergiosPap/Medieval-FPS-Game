@@ -22,7 +22,7 @@ public class NPCMovement : MonoBehaviour
 
     void Update()
     {
-        //Εδώ ρυθμίζονται τα animations του npc (πότε περπατάει και πότε όχι)
+        //Responsible for NPC animations (walking/not walking)
         if (checkForMovement)
         {
             SetTarget();
@@ -43,7 +43,7 @@ public class NPCMovement : MonoBehaviour
         }
     }
 
-    //Ανάλογα με τη φάση του παιχνιδιού, η Eliza μετακινείται στο αντίστοιχο σημείο και στο τέλος κοιτάζει προς την αντίστοιχη κατεύθυνση.
+    //Depending on the story phase, Eliza moves to a certain point and looks in a certain direction when that point is reached.
     private void SetTarget()
     {
         switch (playerInfo.GetPhase())

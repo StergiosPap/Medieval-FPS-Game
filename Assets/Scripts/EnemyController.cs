@@ -8,13 +8,12 @@ public class EnemyController : MonoBehaviour
     private Animator anim;
     public float minDistance = 3f;
     public float moveSpeed = 3f;
-    public int damage = 5; //Η ζημιά που κάνει στον ήρωα.
-    public int immuneCounter; //Μόλις ο ήρωας δεχτεί ζημιά, γίνεται immune για ορισμένα δευτερόλεπτα για να μην ξαναδεχτεί στα επόμενα frames.
-    private bool canDealDamage; //Έλεγχος για το αν μπορεί να δεχτεί ζημιά (ο ήρωας).
+    public int damage = 5; //Damage dealt to the hero
+    public int immuneCounter; //Whenever the enemy takes damage he becomes immune for a few seconds and cannot take damage in the next few frames
+    private bool canDealDamage; //Check if player can take damage
     private Transform orc;
     private PlayerInfo playerInfo;
     
-
     void Start()
     {
         anim = gameObject.GetComponent<Animator>();
@@ -25,14 +24,12 @@ public class EnemyController : MonoBehaviour
         canDealDamage = true;
     }
 
-    //Μετακίνηση προς τον παίκτη.
     void Update()
     {
-        //Debug.Log(Vector3.Distance(player.position, transform.position));
-
+        //Move towards the player
         transform.LookAt(player);
 
-        if (Vector3.Distance(player.position, transform.position) > minDistance) //Μόλις φτάσει στην καθορισμένη απόσταση σταματάει να πλησιάζει.
+        if (Vector3.Distance(player.position, transform.position) > minDistance) //Whenever it reaches a certain distance from the player, it stops approaching.
         {
             if (!anim.GetBool("isWalking"))
             {
@@ -60,24 +57,20 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-
-    //Αντίστροφη μέτρηση frames μέχρι να μπορεί να ξαναφάει ζημιά.
+    //Countdown until the enemy can take damage again
     void Countdown()
     {
         immuneCounter--;
-        if (immuneCounter == 0) //Μπορεί να ξαναδεχτεί ζημιά.
+        if (immuneCounter == 0) //Can deal damage
         {
             canDealDamage = true;
-            immuneCounter = 15; //Αντίστροφη μέτρηση frames μέχρι να μπορεί να ξαναφάει ζημιά.
+            immuneCounter = 15; //Countdown
         }
     }
-
-
-    //Ζημιά στον ήρωα.
+    
     void InflictDamage()
     {
         playerInfo.GainHealth(-damage);
     }
-
-
+    
 }

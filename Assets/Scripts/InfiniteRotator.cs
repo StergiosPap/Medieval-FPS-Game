@@ -12,7 +12,7 @@ public class InfiniteRotator : MonoBehaviour
     private bool isInside = false;
     public GameObject switchPanel;
 
-    // Start is called before the first frame update
+    //Start is called before the first frame update
     void Start()
     {
         if (RotateOnStart)
@@ -21,7 +21,7 @@ public class InfiniteRotator : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+    //Update is called once per frame
     void Update()
     {
         if (isInside && Input.GetKeyDown(KeyCode.E))

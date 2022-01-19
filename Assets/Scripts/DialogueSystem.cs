@@ -112,9 +112,14 @@ public class DialogueSystem : MonoBehaviour
         }
     }
 
-
     private IEnumerator DisplayString(string stringToDisplay)
     {
+        /* Displays the NPC's dialogue string.
+         * In some cases the dialogue depends on the current "story phase".
+         * Whenever this function finds the character "^", it progresses the story phase.
+         * There are other characters which are not shown in the dialogue window
+         * and perform a certain action instead. For example, add a certain item to the player's inventory.
+         */
         if (!outOfRange)
         {
             int stringLength = stringToDisplay.Length;
@@ -124,32 +129,30 @@ public class DialogueSystem : MonoBehaviour
             pressEHelper.gameObject.SetActive(false);
             while (currentCharacterIndex < stringLength)
             {
-
-                if (string.Equals(stringToDisplay[currentCharacterIndex], '^')) //Ανεβάζει phase
+                if (string.Equals(stringToDisplay[currentCharacterIndex], '^')) //Increase phase
                 {
                     playerInfo.NextPhase();
                 }
-                else if (string.Equals(stringToDisplay[currentCharacterIndex], '*')) //Προσθήκη σπαθιού στο inventory
+                else if (string.Equals(stringToDisplay[currentCharacterIndex], '*')) //Add sword to inventory
                 {
                     inventory.AddItem(0);
                 }
-                else if (string.Equals(stringToDisplay[currentCharacterIndex], '#')) //Προσθήκη health potion στο inventory
+                else if (string.Equals(stringToDisplay[currentCharacterIndex], '#')) //Add health potion to inventory
                 {
                     inventory.AddItem(1);
                 }
-                else if (string.Equals(stringToDisplay[currentCharacterIndex], '%')) //Προσθήκη βιβλίου στο inventory
+                else if (string.Equals(stringToDisplay[currentCharacterIndex], '%')) //Add book to inventory
                 {
                     inventory.AddItem(3);
                 }
-                else if (string.Equals(stringToDisplay[currentCharacterIndex], '&')) //Προσθήκη παπύρου στο inventory
+                else if (string.Equals(stringToDisplay[currentCharacterIndex], '&')) //Add scroll to inventory
                 {
                     inventory.AddItem(4);
                 }
-                else //Κανονικός χαρακτήρας
+                else //Other character. Display as normal.
                 {
                     dialogueText.text += stringToDisplay[currentCharacterIndex];
                 }
-
 
 
                 currentCharacterIndex++;
@@ -192,6 +195,7 @@ public class DialogueSystem : MonoBehaviour
         dialogueBoxGUI.gameObject.SetActive(false);
     }
 
+    //When the player gets out of NPC's range, stop displaying dialogue window.
     public void OutOfRange()
     {
         outOfRange = true;

@@ -26,60 +26,60 @@ public class EnemyHealth : MonoBehaviour
 
     void Update()
     {
+        //Update health bar
         slider.value = CalculateHealth();
         barColor.color = CalculateColor();
 
         if (health < maxhealth)
         {
-            healthBarUI.SetActive(true);
+            healthBarUI.SetActive(true); //When it takes damage for the first time, the health bar appears.
         }
 
         if (health <= 0)
         {
-            playerInfo.GainExp(20);
-            Destroy(gameObject);
+            playerInfo.GainExp(20); //Give exp points to player
+            Destroy(gameObject); //Destroy enemy object
             
         }
 
         if (health > maxhealth)
         {
-            health = maxhealth;
+            health = maxhealth; //Cannot exceed maxhealth
         }
-
 
     }
     
 
-    //Χρειαζόμαστε τιμή μεταξύ 0 και 1 για το ProgressBar.
+    //Return a value between 0 and 1 for ProgressBar
     float CalculateHealth()
     {
         return health / maxhealth;
     }
 
 
-    //Βρίσκει το χρώμα του Health Bar ανάλογα με το ποσοστό ζωής.
+    //Finds the appropriate color for the Health Bar, depending on the remaining health percentage
     Color32 CalculateColor()
     {
         if (health / maxhealth >= 0.75) //Health 75-100%
         {
-            return new Color32(0, 255, 0, 150); //Πράσινο
+            return new Color32(0, 255, 0, 150); //Green
         }
         else if (health / maxhealth >= 0.5) //Health 50-75%
         {
-            return new Color32(255, 255, 0, 150); //Κίτρινο
+            return new Color32(255, 255, 0, 150); //Yellow
         }
         else if (health / maxhealth >= 0.25) //Health 25-50%
         {
-            return new Color32(255, 128, 0, 150); //Πορτοκαλί
+            return new Color32(255, 128, 0, 150); //Orange
         }
         else //Health 0-25%
         {
-            return new Color32(255, 0, 0, 150); //Κόκκινο
+            return new Color32(255, 0, 0, 150); //Red
         }
     }
+    
 
-
-    //Ζημιά που θα γίνεται μετά από χτύπημα με το σπαθί.
+    //Damage dealt to enemy after getting hit with the sword
     public void TakeDamage(int damage)
     {
         health -= damage;

@@ -16,18 +16,19 @@ public class Inventory : MonoBehaviour
 
     private PlayerInfo playerInfo;
 
-    public Text details; //Εμφανίζει τις λεπτομέρειες του αντικειμένου που πατήθηκε.
+    public Text details; //Show the details of the item that was clicked
 
-    public GameObject statsPanel, helpPanel; //Τα πάνελ που βρίσκονται στο πάνω μέρος της οθόνης.
+    public GameObject statsPanel, helpPanel; //Panels in the inventory screen
 
-    //Λίστα που περιέχει τα ID των αντικειμένων του παίκτη. Static διότι πρέπει να μεταφέρεται από τη μία σκηνή στην άλλη.
+    //List that contains the IDs of the player's items. Static because we need to transfer the list from one scene to another.
     public static IList<int> inventoryItems = new List<int>();
 
     //0 = Sword, 1 = Potion, 2 = Apple, 3 = Book, 4 = Scroll, 5 = Bottle of water
     public Sprite[] itemIcons = new Sprite[6];
 
-    //Πίνακας με τα descriptions όλων των αντικειμένων.
-    public static string[] itemDescription = { "A handmade sword made by Derrek the blacksmith. Only the strongest warrior can unleash its true power. Press 'F' to equip/unequip.", 
+    //Description of every item
+    public static string[] itemDescription = {
+        "A handmade sword made by Derrek the blacksmith. Only the strongest warrior can unleash its true power. Press 'F' to equip/unequip.", 
         "A health potion made by Rose the apothecary. Press 'P' to use! (+20 Health)", 
         "A fresh apple from Alexandria's crops.", 
         "A book called 'The Art of craftsmanship'.", 
@@ -70,7 +71,6 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    //Κλείνει το inventory
     void CloseInventory()
     {
         statsPanel.SetActive(true);
@@ -81,8 +81,6 @@ public class Inventory : MonoBehaviour
         Time.timeScale = 1;
     }
 
-
-    //Ανοίγει το inventory
     void OpenInventory()
     {
         statsPanel.SetActive(false);
@@ -104,14 +102,13 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    //Προσθέτει το item στη λίστα (πχ όταν αποκτηθεί μετά από κάποιο quest).
+    //Adds an item in the list (for example when it is gained after a quest)
     public void AddItem(int itemID)
     {
         inventoryItems.Add(itemID);
     }
     
-
-    //Ενημερώνει το inventory με τις πληροφορίες της λίστας inventoryItems. Καλείται όταν ανοίξει το inventory.
+    //When the inventory opens, this function updates its contents in order to display them
     public void UpdateInventory()
     {
         for (int i = 0; i < inventoryItems.Count; i++)
@@ -120,21 +117,20 @@ public class Inventory : MonoBehaviour
             slot[i].GetComponent<Slot>().UpdateSlot(itemDescription[inventoryItems[i]]);
         }
 
-        //Κάνει reset όσα slots δεν περιέχουν αντικείμενο.
+        //Reset every slot that doesn't contain an item
         for (int i = inventoryItems.Count; i<12; i++)
         {
             slot[i].GetComponent<Slot>().ResetSlot();
         }
     }
 
-    //Επιστρέφει true αν υπάρχει σπαθί στο inventory.
+    //Check if there is a sword in the inventory
     public bool hasWeapon()
     {
         return inventoryItems.Contains(0);
     }
 
-
-    //Επιστρέφει true αν έχει ολοκληρωθεί το 2ο quest (μήλο και βιβλίο στο inventory).
+    //Check if the second quest is completed. If yes, remove the requested items from the inventory.
     public bool quest2Completed()
     {
         if (inventoryItems.Contains(2) && inventoryItems.Contains(3))
@@ -146,8 +142,7 @@ public class Inventory : MonoBehaviour
         return false;
     }
 
-
-    //Επιστρέφει true αν έχει ολοκληρωθεί το 3ο quest (πάπυρος και μπουκάλι νερό στο inventory).
+    //Check if the third quest is completed. If yes, remove the requested items from the inventory.
     public bool quest3Completed()
     {
         if (inventoryItems.Contains(4) && inventoryItems.Contains(5))
@@ -158,12 +153,11 @@ public class Inventory : MonoBehaviour
         }
         return false;
     }
-
-
-    //Καλείται όταν ο χρήστης πατήσει το κουμπί 'P'.
+    
+    //Gets called when the player presses the "P" key
     public void UsePotion()
     {
-        if (inventoryItems.Contains(1)) //Υπάρχει potion στο inventory.
+        if (inventoryItems.Contains(1)) //If there is a potion in the inventory
         {
             playerInfo.GainHealth(20);
             inventoryItems.Remove(1);

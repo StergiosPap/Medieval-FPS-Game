@@ -10,7 +10,7 @@ public class MouseLook : MonoBehaviour
 
     void Start()
     {
-        //Κλειδώνει τον κέρσορα
+        //Lock cursor
         Cursor.lockState = CursorLockMode.Locked;
     }
 

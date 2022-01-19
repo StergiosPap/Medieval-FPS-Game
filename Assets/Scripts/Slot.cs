@@ -24,16 +24,15 @@ public class Slot : MonoBehaviour
         details.text = "";
     }
 
-    //Εμφανίζει την εικόνα του αντικειμένου που αποκτήθηκε.
     public void UpdateSlot(string desc)
     {
-        //Αλλάζει το transparency του panel στο slot.
+        //Changes the transparency in the slot
         Image image = slotIconGO.GetComponent<Image>();
         Color c = image.color;
         c.a = 255;
         image.color = c;
 
-        //Θέτει την εικόνα του panel.
+        //Sets the panel's image
         slotIconGO.GetComponent<Image>().sprite = icon;
 
         description = desc;
@@ -41,7 +40,7 @@ public class Slot : MonoBehaviour
 
     public void ResetSlot()
     {
-        //Αλλάζει το transparency του panel στο slot.
+        //Changes the transparency in the slot
         Image image = slotIconGO.GetComponent<Image>();
         Color c = image.color;
         c.a = 0;
@@ -50,7 +49,7 @@ public class Slot : MonoBehaviour
         description = "";
     }
 
-    //Εμφανίζει στο textbox τις λεπτομέρειες του αντικειμένου που πατήθηκε.
+    //Shows the details in the textbox
     public void ShowDetails()
     {
         details.text = description;

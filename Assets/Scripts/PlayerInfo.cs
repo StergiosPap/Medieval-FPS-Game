@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 public class PlayerInfo : MonoBehaviour
 {
-    //Stats του παίκτη.
-    public int health = 50; //Τρέχουσα ζωή
-    public int maxHealth = 50; //Μέγιστη ζωή (αυξάνεται με κάθε επίπεδο)
-    public int experience = 0; //Πόντοι εμπειρίας
-    public int level = 1; //Επίπεδο
-    public int expGoal = 20; //Πόντοι για αύξηση επιπέδου
-    public int phase = 0; //Φάση του παιχνιδιού
+    //Player stats
+    public int health = 50; //Current health points
+    public int maxHealth = 50; //Maximum health points. Increases with each level.
+    public int experience = 0; //Experience points
+    public int level = 1;
+    public int expGoal = 20; //Exp needed for next level
+    public int phase = 0; //Story phase
 
     public GameObject notificationPanel;
     public Text notificationText;
@@ -29,10 +28,10 @@ public class PlayerInfo : MonoBehaviour
     public void LevelUp()
     {
         level++;
-        maxHealth += 5; //Κάθε επίπεδο θα έχει max 5 πόντους ζωής περισσότερους από το προηγούμενο.
-        expGoal += 10; //Κάθε επίπεδο θα απαιτεί 10 περισσότερους πόντους εμπειρίας από το προηγούμενο.
+        maxHealth += 5; //In each level, increase the player's max health points
+        expGoal += 10; //Each level requires 10 exp more than the previous one
 
-        health += 15; //Αναπλήρωση λίγης ζωής.
+        health += 15; //Restores some life
         if (health > maxHealth)
         {
             health = maxHealth;
@@ -47,7 +46,7 @@ public class PlayerInfo : MonoBehaviour
         notification = "+" + exp.ToString() + " Exp!";
         if (experience >= expGoal)
         {
-            experience -= expGoal; //Reset πριν γίνει το level up.
+            experience -= expGoal; //Reset before levelling up.
             LevelUp();
             notification += " Level Up!";
         }
@@ -55,15 +54,14 @@ public class PlayerInfo : MonoBehaviour
         Invoke("ClosePanel", 1.5f);
     }
 
-    //Αλλαγή στη ζωή του παίκτη (μπορεί να την μειώσει αν η παράμετρος hp είναι αρνητική)
+    //Change player's HP (can reduce if the parameter is negative)
     public void GainHealth(int hp)
     {
         health += hp;
-        //Περιορισμός της τιμής.
+        //Clamping
         if (health > maxHealth) { health = maxHealth; }
     }
-
-
+    
     void OpenPanel()
     {
         notificationText.text = notification;
@@ -74,7 +72,6 @@ public class PlayerInfo : MonoBehaviour
     {
         notificationPanel.SetActive(false);
     }
-
 
 
 

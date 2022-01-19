@@ -9,9 +9,9 @@ public class FPSMovement : MonoBehaviour
 {
     public CharacterController controller;
 
-    public float speed = 8f; //Ταχύτητα του παίκτη
-    public float gravity = -9.81f; //Επιτάχυνση της βαρύτητας
-    public float jumpHeight = 3f; //Μέγιστο ύψος άλματος
+    public float speed = 8f; //Player speed
+    public float gravity = -9.81f; //Gravity acceleration
+    public float jumpHeight = 3f; //Max jump height
 
     Vector3 velocity;
 
@@ -23,12 +23,12 @@ public class FPSMovement : MonoBehaviour
     Animator anim;
 
     public bool isPaused = false;
-    public GameObject pausedPanel; //Το πάνελ που ανοίγει όταν το παιχνίδι είναι σε παύση.
-    public GameObject inventoryPanel; //Το πάνελ που δείχνει το inventory και τα quests.
-    public GameObject notificationPanel; //Το notification panel στο κάτω μέρος της οθόνης.
+    public GameObject pausedPanel; //Panel that opens when the game is paused
+    public GameObject inventoryPanel; //Panel that shows the inventory and quests
+    public GameObject notificationPanel; //Notification panel in the bottom side of the screen
     public Text notificationText;
 
-    //Οι πληροφορίες του παίκτη (μπάρα ζωής και επίπεδο).
+    //Player info (health points and level)
     public Text levelText;
     public Slider slider;
     public Image barColor;
@@ -54,7 +54,7 @@ public class FPSMovement : MonoBehaviour
 
         isGameOver = false;
 
-        //Κλειδώνει τον κέρσορα
+        //Locks the cursor
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -65,7 +65,7 @@ public class FPSMovement : MonoBehaviour
     {
         UpdateStatsPanel();
                 
-        //Έλεγχος για πάτημα Escape ώστε να ανοίξει/κλείσει το μενού.
+        //Check whether the Escape key is pressed in order to open/close the menu
         if (Input.GetKeyDown(KeyCode.Escape) && !isGameOver)
         {
             isPaused = !isPaused;
@@ -90,18 +90,18 @@ public class FPSMovement : MonoBehaviour
         }
 
 
-        //Equip/Unequip το όπλο.
+        //Equip/Unequip the sword
         if (!isPaused && !isGameOver && Input.GetKeyDown(KeyCode.F))
         {
-            if (inventory.hasWeapon()) //Αν έχει σπαθί στο inventory
+            if (inventory.hasWeapon()) //If the inventory contains a sword
             {
                 isEquipped = !isEquipped;
-                if (isEquipped) //Εμφανίζει ή εξαφανίζει το σπαθί από την οθόνη
+                if (isEquipped) //Show/Don't show the sword held by the player
                 {
                     sword.layer = 0; //Default layer
                 } else
                 {
-                    sword.layer = 9; //Player layer (που είναι αόρατο)
+                    sword.layer = 9; //Player layer (invisible sword)
                 }
             } else
             {
@@ -110,7 +110,7 @@ public class FPSMovement : MonoBehaviour
             }
         }
 
-        //Χρήση potion
+        //Use potion
         if (!isPaused && !isGameOver && Input.GetKeyDown(KeyCode.P))
         {
             inventory.UsePotion();
@@ -119,7 +119,7 @@ public class FPSMovement : MonoBehaviour
 
         if (isEquipped && Input.GetMouseButtonDown(0))
         {
-            swordCollider.enabled = true; //Ενεργοποιεί το collider που μπορεί να χτυπήσει τον εχθρό.
+            swordCollider.enabled = true; //Activates the collider that can hit the enemies
             anim.SetBool("isAttacking", true);
         }
 
@@ -128,16 +128,15 @@ public class FPSMovement : MonoBehaviour
             anim.SetBool("isAttacking", false);
         }
 
-        //Αν βρισκόμαστε σε pause και πατηθεί το Q γίνεται επιστροφή στο Main Menu.
+        //If the game is paused and the "Q" key is pressed, return to Main Menu
         if (isPaused && Input.GetKeyDown(KeyCode.Q))
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             SceneManager.LoadScene("Menu");
         }
-
-
-        //Μετακίνηση παίκτη
+        
+        //Player movement
         if (isGrounded && velocity.y < 0)
         {
             velocity.y = -5f;
@@ -150,12 +149,12 @@ public class FPSMovement : MonoBehaviour
 
         controller.Move(move * speed * Time.deltaTime);
 
-        //Άλμα
+        //Jump
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             isGrounded = false;
-            //Υπάρχει ένα χρονικό όριο (μισό δευτερόλεπτο) μέσα στο οποίο ο παίκτης δεν μπορεί να ξαναπηδήξει.
+            //There is a short period in which the player cannot jump again
             Invoke("Switch", 0.5f);
         }
 
@@ -170,7 +169,7 @@ public class FPSMovement : MonoBehaviour
         isGrounded = true;
     }
 
-    //Μέθοδος που εκτελέιται κατά την σύγκρουση με το έδαφος.
+    //Function that is called when the player collides with the ground
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Ground")
@@ -178,9 +177,8 @@ public class FPSMovement : MonoBehaviour
             isGrounded = true;
         }
     }
-
-
-    //Ενημερώνει το πάνελ με τα stats
+    
+    //Updates the stats panel
     private void UpdateStatsPanel()
     {
         levelText.text = "Level " + playerInfo.GetLevel().ToString() + " (" + playerInfo.GetExperience().ToString() + "/" + playerInfo.GetExperienceGoal().ToString() + ")";
@@ -192,40 +190,37 @@ public class FPSMovement : MonoBehaviour
             GameOver();
         }
     }
-
-
-    //Χρειαζόμαστε τιμή μεταξύ 0 και 1 για το ProgressBar.
+    
+    //Return a value between 0 and 1 for the ProgressBar
     float CalculateHealth(int health, int maxhealth)
     {
         return (float)health / (float)maxhealth;
     }
 
-
-    //Βρίσκει το χρώμα του Health Bar ανάλογα με το ποσοστό ζωής.
+    //Finds the appropriate color for the Health Bar, depending on the remaining health percentage
     Color32 CalculateColor(int hp, int max_hp)
     {
         float health = (float)hp;
         float maxhealth = (float)max_hp;
         if (health / maxhealth >= 0.75) //Health 75-100%
         {
-            return new Color32(0, 255, 0, 150); //Πράσινο
+            return new Color32(0, 255, 0, 150); //Green
         }
         else if (health / maxhealth >= 0.5) //Health 50-75%
         {
-            return new Color32(255, 255, 0, 150); //Κίτρινο
+            return new Color32(255, 255, 0, 150); //Yellow
         }
         else if (health / maxhealth >= 0.2) //Health 20-50%
         {
-            return new Color32(255, 128, 0, 150); //Πορτοκαλί
+            return new Color32(255, 128, 0, 150); //Orange
         }
         else //Health 0-20%
         {
-            return new Color32(255, 0, 0, 150); //Κόκκινο
+            return new Color32(255, 0, 0, 150); //Red
         }
     }
-
-
-    //Χρήση βοηθητικού πάνελ που ενημερώνει ότι δεν υπάρχει σπαθί στο inventory.
+    
+    //Opens a notification panel that informs the player that they don't have a sword in the inventory
     void OpenPanel()
     {
         notificationText.text = "You don't have a sword yet!";
@@ -237,14 +232,12 @@ public class FPSMovement : MonoBehaviour
         notificationPanel.SetActive(false);
     }
 
-    
+    //Show Game Over panel and freeze the in-game time
     void GameOver()
     {
         isGameOver = true;
         GOpanel.SetActive(true);
         Time.timeScale = 0;
     }
-
-
 
 }

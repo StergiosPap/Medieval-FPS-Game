@@ -8,8 +8,8 @@ public class LocationChange : MonoBehaviour
 {
     public Animator anim;
     public Text locationText;
-    public static string currentLocation = "Forest"; //Ονομασία του περιβάλλοντος που βρίσκεται ο παίκτης
-    private Scene currentScene; //Το active scene
+    public static string currentLocation = "Forest";
+    private Scene currentScene; //Active scene
 
     public GameObject panel;
 
@@ -21,7 +21,7 @@ public class LocationChange : MonoBehaviour
         currentScene = SceneManager.GetActiveScene();
     }
 
-    //Ελέγχει μήπως ο παίκτης άλλαξε περιβάλλον
+    //Checks if the player's location has changed
     void Update()
     {
         if (currentScene.name == "Village")
@@ -50,7 +50,7 @@ public class LocationChange : MonoBehaviour
         }
     }
 
-    //Οι παρακάτω συναρτήσεις ελέγχουν το panel που εμφανίζεται όταν ο χρήστης αλλάζει τοποθεσία
+    //When the location changes, show the new location's name in a panel
     void OpenPanel()
     {
         locationText.text = currentLocation;

@@ -23,7 +23,7 @@ public class SceneChanger : MonoBehaviour
 
     void Update()
     {
-        if (insideBounds && Input.GetKeyDown(KeyCode.E))
+        if (insideBounds && Input.GetKeyDown(KeyCode.E)) //If "E" is pressed when the player is near the door, change sceen
         {
             SceneManager.LoadScene(destination);
         }
@@ -36,7 +36,7 @@ public class SceneChanger : MonoBehaviour
         {
             helperGUI.SetActive(true);
             insideBounds = true;
-            switch (collider.name)
+            switch (collider.name) //Change destination from village to farms and vice-versa
             {
                 case "ToVillage":
                     destination = "Village";
@@ -52,6 +52,7 @@ public class SceneChanger : MonoBehaviour
 
     private void OnTriggerExit(Collider collider)
     {
+        //When the player moves away from the door, stop displaying the panel
         if (collider.tag == "ChangeScene")
         {
             helperGUI.SetActive(false);

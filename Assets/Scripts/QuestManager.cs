@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class QuestManager : MonoBehaviour
 {
+    /* Responsible for showing the quest screen with the correct quests in each story phase.
+     * If a quest is clicked, show its details.
+     */
     public PlayerInfo playerInfo;
 
     public Text description;
